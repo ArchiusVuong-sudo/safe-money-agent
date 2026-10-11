@@ -89,11 +89,11 @@ export function RunsPage({ focusId }: { focusId: string | null }) {
                     <td className="max-w-[260px] px-4 py-2">
                       <div className="flex items-center gap-1.5">
                         {r.status === "running" ? (
-                          <Loader2 className="size-3.5 animate-spin text-brand-600" />
+                          <Loader2 className="size-3.5 shrink-0 animate-spin text-brand-600" />
                         ) : r.status === "error" ? (
-                          <CircleAlert className="size-3.5 text-rose-600" />
+                          <CircleAlert className="size-3.5 shrink-0 text-rose-600" />
                         ) : (
-                          <CircleCheck className="size-3.5 text-emerald-600" />
+                          <CircleCheck className="size-3.5 shrink-0 text-emerald-600" />
                         )}
                         <span className="truncate font-medium text-slate-800">{r.prompt}</span>
                       </div>
