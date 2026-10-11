@@ -17,7 +17,7 @@ Full video: https://github.com/ArchiusVuong-sudo/safe-money-agent/releases/downl
 ## Architecture
 
 ```mermaid
-flowchart LR
+flowchart TB
     ui["React UI: phone screens, trace panel, Runs, Evals"] -->|"REST and SSE"| api["FastAPI server"]
     api --> runner["Agent runner"]
     runner --> sdk["Claude Agent SDK client"]
