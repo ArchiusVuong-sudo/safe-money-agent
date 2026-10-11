@@ -1,0 +1,31 @@
+[project]
+name = "safe-money-agent"
+version = "0.1.0"
+description = "A prototype money agent that forecasts an overdraft, proposes a fix, checks it in code and moves money only after approval."
+authors = [{ name = "Khanh Vuong Tuan" }]
+license = "MIT"
+requires-python = ">=3.13"
+dependencies = [
+    "claude-agent-sdk==0.2.165",
+    "fastapi>=0.143.0",
+    "pydantic>=2",
+    "sqlalchemy>=2.0",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/safemoney"]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "mypy>=2.4.0",
+    "playwright>=1.63.0",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "ruff>=0.17.0",
+]
