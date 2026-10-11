@@ -16,18 +16,8 @@
   "turns": [
     {
       "type": "tool_use",
-      "name": "mcp__money__move_money",
-      "input": {
-        "from_account": "Everyday Checking",
-        "to_account": "Rainy Day Savings",
-        "amount_usd": 1500,
-        "date": "2026-10-11",
-        "memo": "Move to savings"
-      }
-    },
-    {
-      "type": "text",
-      "text": "Account ids are chk and sav. Retrying with those."
+      "name": "mcp__money__get_accounts",
+      "input": {}
     },
     {
       "type": "tool_use",
@@ -53,23 +43,22 @@
     },
     {
       "type": "text",
-      "text": "I couldn't move the $1,500.00 today. Checking would have dropped to -$1,354.29 on Sun, Oct 18, which is below the $50.00 floor.\n\nI scheduled the same $1,500.00 from checking to savings for Mon, Oct 19, which is payday. It's scheduled, not moved yet. Checking's forecast low stays at $145.71 on Sun, Oct 18."
+      "text": "I couldn't move $1,500.00 today. Checking would have dropped to -$1,404.29 on Sun, Oct 18, which is under the $50.00 floor. I scheduled the same $1,500.00 from Everyday Checking to Rainy Day Savings for Mon, Oct 19, which is payday. Nothing has moved yet. Checking still bottoms out at $95.71 on Sun, Oct 18."
     }
   ],
   "decisions": [
-    "policy_denied",
     "policy_denied",
     "approved"
   ],
   "usage": {
     "input_tokens": 8,
-    "output_tokens": 723,
-    "cache_creation_tokens": 2204,
-    "cache_read_tokens": 13095
+    "output_tokens": 559,
+    "cache_creation_tokens": 2018,
+    "cache_read_tokens": 12758
   },
-  "cost_usd": 0.0189038,
-  "duration_ms": 7269,
+  "cost_usd": 0.0164659,
+  "duration_ms": 7281,
   "num_turns": 4,
-  "final_text": "I couldn't move the $1,500.00 today. Checking would have dropped to -$1,354.29 on Sun, Oct 18, which is below the $50.00 floor.\n\nI scheduled the same $1,500.00 from checking to savings for Mon, Oct 19, which is payday. It's scheduled, not moved yet. Checking's forecast low stays at $145.71 on Sun, Oct 18.",
+  "final_text": "I couldn't move $1,500.00 today. Checking would have dropped to -$1,404.29 on Sun, Oct 18, which is under the $50.00 floor. I scheduled the same $1,500.00 from Everyday Checking to Rainy Day Savings for Mon, Oct 19, which is payday. Nothing has moved yet. Checking still bottoms out at $95.71 on Sun, Oct 18.",
   "grounded": true
 }

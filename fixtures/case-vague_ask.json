@@ -16,19 +16,19 @@
   "turns": [
     {
       "type": "text",
-      "text": "Which accounts do you want to move money between, and how much (or what's the goal)?"
+      "text": "Which accounts do you want to move money between, and how much? If you have a goal in mind, like building savings or covering a bill, tell me and I'll work out the rest."
     }
   ],
   "decisions": [],
   "usage": {
     "input_tokens": 2,
-    "output_tokens": 27,
-    "cache_creation_tokens": 687,
-    "cache_read_tokens": 2273
+    "output_tokens": 53,
+    "cache_creation_tokens": 685,
+    "cache_read_tokens": 2283
   },
-  "cost_usd": 0.0036006,
-  "duration_ms": 1464,
+  "cost_usd": 0.0038545999999999997,
+  "duration_ms": 1865,
   "num_turns": 1,
-  "final_text": "Which accounts do you want to move money between, and how much (or what's the goal)?",
+  "final_text": "Which accounts do you want to move money between, and how much? If you have a goal in mind, like building savings or covering a bill, tell me and I'll work out the rest.",
   "grounded": true
 }

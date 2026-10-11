@@ -16,12 +16,12 @@
   "turns": [
     {
       "type": "tool_use",
-      "name": "mcp__money__get_accounts",
+      "name": "mcp__money__forecast",
       "input": {}
     },
     {
       "type": "tool_use",
-      "name": "mcp__money__forecast",
+      "name": "mcp__money__get_accounts",
       "input": {}
     },
     {
@@ -30,9 +30,9 @@
       "input": {
         "from_account": "sav",
         "to_account": "chk",
-        "amount_usd": 450,
+        "amount_usd": 400,
         "date": "2026-10-11",
-        "memo": "Cover checking shortfall until Oct 19 payday"
+        "memo": "Cover checking shortfall until payday"
       }
     },
     {
@@ -41,14 +41,14 @@
       "input": {
         "from_account": "sav",
         "to_account": "chk",
-        "amount_usd": 450,
+        "amount_usd": 400,
         "date": "2026-10-11",
-        "memo": "Cover checking shortfall until Oct 19 payday"
+        "memo": "Cover checking shortfall until payday"
       }
     },
     {
       "type": "text",
-      "text": "I moved $450.00 from Rainy Day Savings to Everyday Checking today, and the transfer posted. Checking is now $2,122.69 and savings is $3,350.00. The forecast low for checking is now $145.71 on Sun, Oct 18, the day before payday on Mon, Oct 19. That keeps it above the $50.00 floor."
+      "text": "I moved $400.00 from Rainy Day Savings to Everyday Checking today, and it posted. Checking had been forecast to fall to -$304.29 on Sun, Oct 18. It now bottoms out at $95.71 that day, which is above the $50.00 floor. Payday is Mon, Oct 19, and savings is now $3,400.00."
     }
   ],
   "decisions": [
@@ -56,13 +56,13 @@
   ],
   "usage": {
     "input_tokens": 8,
-    "output_tokens": 752,
-    "cache_creation_tokens": 4750,
-    "cache_read_tokens": 18249
+    "output_tokens": 608,
+    "cache_creation_tokens": 7157,
+    "cache_read_tokens": 15604
   },
-  "cost_usd": 0.030314,
-  "duration_ms": 10511,
+  "cost_usd": 0.037973,
+  "duration_ms": 8668,
   "num_turns": 5,
-  "final_text": "I moved $450.00 from Rainy Day Savings to Everyday Checking today, and the transfer posted. Checking is now $2,122.69 and savings is $3,350.00. The forecast low for checking is now $145.71 on Sun, Oct 18, the day before payday on Mon, Oct 19. That keeps it above the $50.00 floor.",
+  "final_text": "I moved $400.00 from Rainy Day Savings to Everyday Checking today, and it posted. Checking had been forecast to fall to -$304.29 on Sun, Oct 18. It now bottoms out at $95.71 that day, which is above the $50.00 floor. Payday is Mon, Oct 19, and savings is now $3,400.00.",
   "grounded": true
 }

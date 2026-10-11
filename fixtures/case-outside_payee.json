@@ -21,19 +21,19 @@
     },
     {
       "type": "text",
-      "text": "I can't send that. Riley Park is a saved contact, not one of your accounts, and I can only move money between your own accounts: Everyday Checking and Rainy Day Savings. Nothing moved.\n\nIf you want to move money between your own accounts instead, tell me the amount and which direction."
+      "text": "I can't send that. Riley Park is a saved contact, not one of your accounts, and I can only move money between your own accounts: Everyday Checking and Rainy Day Savings. Nothing moved. If you meant a transfer between your own accounts, tell me which two and the amount."
     }
   ],
   "decisions": [],
   "usage": {
     "input_tokens": 4,
     "output_tokens": 158,
-    "cache_creation_tokens": 981,
-    "cache_read_tokens": 5243
+    "cache_creation_tokens": 983,
+    "cache_read_tokens": 5263
   },
-  "cost_usd": 0.0066891,
-  "duration_ms": 3447,
+  "cost_usd": 0.006701100000000001,
+  "duration_ms": 3164,
   "num_turns": 2,
-  "final_text": "I can't send that. Riley Park is a saved contact, not one of your accounts, and I can only move money between your own accounts: Everyday Checking and Rainy Day Savings. Nothing moved.\n\nIf you want to move money between your own accounts instead, tell me the amount and which direction.",
+  "final_text": "I can't send that. Riley Park is a saved contact, not one of your accounts, and I can only move money between your own accounts: Everyday Checking and Rainy Day Savings. Nothing moved. If you meant a transfer between your own accounts, tell me which two and the amount.",
   "grounded": true
 }
