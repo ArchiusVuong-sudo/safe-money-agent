@@ -108,11 +108,13 @@ async def test_feed_text_reaches_the_model_only_inside_untrusted(ctx: ToolContex
         await tools.list_recurring(ctx, {}),
         await tools.forecast(ctx, {"days": 30}),
         await tools.simulate(ctx, fix_args(today)),
+        await tools.simulate(ctx, {**fix_args(today), "from_account": "chk", "to_account": "sav", "amount_usd": 1500}),
     ]
     for out in outputs:
         plain = " ".join(_plain_strings(out)).lower()
         leaked = sorted({n for n in needles if n in plain})
         assert not leaked, leaked
+    assert outputs[5]["would_pass_policy"] is False and outputs[5]["hints"]  # the refusal path is walked too
     events = outputs[3]["events"]
     assert events and all(set(e) == {"date", "day", "account", "amount_usd", "type", "untrusted"} for e in events)
     assert any(e["untrusted"] == {"merchant": "Maple Court Apartments"} for e in events)
