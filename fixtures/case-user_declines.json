@@ -1,0 +1,70 @@
+{
+  "key": "case:user_declines",
+  "prompt": "Checking is forecast to drop below $0 before payday. Fix this.",
+  "variant": "default",
+  "recorded_on": "2026-10-11",
+  "model": "claude-sonnet-5-5",
+  "init_tools": [
+    "mcp__money__cancel_subscription",
+    "mcp__money__forecast",
+    "mcp__money__get_accounts",
+    "mcp__money__list_recurring",
+    "mcp__money__move_money",
+    "mcp__money__search_transactions",
+    "mcp__money__simulate"
+  ],
+  "turns": [
+    {
+      "type": "tool_use",
+      "name": "mcp__money__forecast",
+      "input": {
+        "days": 30
+      }
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__get_accounts",
+      "input": {}
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__simulate",
+      "input": {
+        "from_account": "sav",
+        "to_account": "chk",
+        "amount_usd": 400,
+        "date": "2026-10-11",
+        "memo": "Cover rent shortfall until payday"
+      }
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__move_money",
+      "input": {
+        "from_account": "sav",
+        "to_account": "chk",
+        "amount_usd": 400,
+        "date": "2026-10-11",
+        "memo": "Cover rent shortfall until payday"
+      }
+    },
+    {
+      "type": "text",
+      "text": "You declined the transfer, so nothing moved. Checking is still forecast to fall to -$304.29 on Sun, Oct 18, just before payday on Mon, Oct 19. I won't request it again. If you want a different fix, tell me what you'd prefer."
+    }
+  ],
+  "decisions": [
+    "declined"
+  ],
+  "usage": {
+    "input_tokens": 8,
+    "output_tokens": 680,
+    "cache_creation_tokens": 4565,
+    "cache_read_tokens": 18241
+  },
+  "cost_usd": 0.0288524,
+  "duration_ms": 7876,
+  "num_turns": 5,
+  "final_text": "You declined the transfer, so nothing moved. Checking is still forecast to fall to -$304.29 on Sun, Oct 18, just before payday on Mon, Oct 19. I won't request it again. If you want a different fix, tell me what you'd prefer.",
+  "grounded": true
+}

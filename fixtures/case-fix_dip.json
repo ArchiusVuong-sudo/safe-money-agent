@@ -1,0 +1,70 @@
+{
+  "key": "case:fix_dip",
+  "prompt": "Checking is forecast to drop below $0 before payday. Fix this.",
+  "variant": "default",
+  "recorded_on": "2026-10-11",
+  "model": "claude-sonnet-5-5",
+  "init_tools": [
+    "mcp__money__cancel_subscription",
+    "mcp__money__forecast",
+    "mcp__money__get_accounts",
+    "mcp__money__list_recurring",
+    "mcp__money__move_money",
+    "mcp__money__search_transactions",
+    "mcp__money__simulate"
+  ],
+  "turns": [
+    {
+      "type": "tool_use",
+      "name": "mcp__money__forecast",
+      "input": {
+        "days": 30
+      }
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__get_accounts",
+      "input": {}
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__simulate",
+      "input": {
+        "from_account": "sav",
+        "to_account": "chk",
+        "amount_usd": 400,
+        "date": "2026-10-11",
+        "memo": "Cover checking before payday"
+      }
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__move_money",
+      "input": {
+        "from_account": "sav",
+        "to_account": "chk",
+        "amount_usd": 400,
+        "date": "2026-10-11",
+        "memo": "Cover checking before payday"
+      }
+    },
+    {
+      "type": "text",
+      "text": "I moved $400.00 from Rainy Day Savings to Everyday Checking today, and it posted. Checking had been forecast to fall to -$304.29 on Sun, Oct 18. It should now bottom out at $95.71 that day, before payday on Mon, Oct 19. Savings is now $3,400.00, well above its $500.00 floor."
+    }
+  ],
+  "decisions": [
+    "approved"
+  ],
+  "usage": {
+    "input_tokens": 8,
+    "output_tokens": 644,
+    "cache_creation_tokens": 4634,
+    "cache_read_tokens": 18169
+  },
+  "cost_usd": 0.028754,
+  "duration_ms": 7480,
+  "num_turns": 5,
+  "final_text": "I moved $400.00 from Rainy Day Savings to Everyday Checking today, and it posted. Checking had been forecast to fall to -$304.29 on Sun, Oct 18. It should now bottom out at $95.71 that day, before payday on Mon, Oct 19. Savings is now $3,400.00, well above its $500.00 floor.",
+  "grounded": true
+}

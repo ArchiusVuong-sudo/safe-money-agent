@@ -1,0 +1,68 @@
+{
+  "key": "checking is forecast to drop below $0 before payday fix this",
+  "prompt": "Checking is forecast to drop below $0 before payday. Fix this.",
+  "variant": "approve",
+  "recorded_on": "2026-10-11",
+  "model": "claude-sonnet-5-5",
+  "init_tools": [
+    "mcp__money__cancel_subscription",
+    "mcp__money__forecast",
+    "mcp__money__get_accounts",
+    "mcp__money__list_recurring",
+    "mcp__money__move_money",
+    "mcp__money__search_transactions",
+    "mcp__money__simulate"
+  ],
+  "turns": [
+    {
+      "type": "tool_use",
+      "name": "mcp__money__get_accounts",
+      "input": {}
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__forecast",
+      "input": {}
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__simulate",
+      "input": {
+        "from_account": "sav",
+        "to_account": "chk",
+        "amount_usd": 450,
+        "date": "2026-10-11",
+        "memo": "Cover checking shortfall until Oct 19 payday"
+      }
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__move_money",
+      "input": {
+        "from_account": "sav",
+        "to_account": "chk",
+        "amount_usd": 450,
+        "date": "2026-10-11",
+        "memo": "Cover checking shortfall until Oct 19 payday"
+      }
+    },
+    {
+      "type": "text",
+      "text": "I moved $450.00 from Rainy Day Savings to Everyday Checking today, and the transfer posted. Checking is now $2,122.69 and savings is $3,350.00. The forecast low for checking is now $145.71 on Sun, Oct 18, the day before payday on Mon, Oct 19. That keeps it above the $50.00 floor."
+    }
+  ],
+  "decisions": [
+    "approved"
+  ],
+  "usage": {
+    "input_tokens": 8,
+    "output_tokens": 752,
+    "cache_creation_tokens": 4750,
+    "cache_read_tokens": 18249
+  },
+  "cost_usd": 0.030314,
+  "duration_ms": 10511,
+  "num_turns": 5,
+  "final_text": "I moved $450.00 from Rainy Day Savings to Everyday Checking today, and the transfer posted. Checking is now $2,122.69 and savings is $3,350.00. The forecast low for checking is now $145.71 on Sun, Oct 18, the day before payday on Mon, Oct 19. That keeps it above the $50.00 floor.",
+  "grounded": true
+}

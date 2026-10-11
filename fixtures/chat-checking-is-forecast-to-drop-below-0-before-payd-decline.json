@@ -1,0 +1,70 @@
+{
+  "key": "checking is forecast to drop below $0 before payday fix this",
+  "prompt": "Checking is forecast to drop below $0 before payday. Fix this.",
+  "variant": "decline",
+  "recorded_on": "2026-10-11",
+  "model": "claude-sonnet-5-5",
+  "init_tools": [
+    "mcp__money__cancel_subscription",
+    "mcp__money__forecast",
+    "mcp__money__get_accounts",
+    "mcp__money__list_recurring",
+    "mcp__money__move_money",
+    "mcp__money__search_transactions",
+    "mcp__money__simulate"
+  ],
+  "turns": [
+    {
+      "type": "tool_use",
+      "name": "mcp__money__forecast",
+      "input": {
+        "days": 30
+      }
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__get_accounts",
+      "input": {}
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__simulate",
+      "input": {
+        "from_account": "sav",
+        "to_account": "chk",
+        "amount_usd": 400,
+        "date": "2026-10-12",
+        "memo": "Cover checking before Oct 19 payday"
+      }
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__move_money",
+      "input": {
+        "from_account": "sav",
+        "to_account": "chk",
+        "amount_usd": 400,
+        "date": "2026-10-12",
+        "memo": "Cover checking before Oct 19 payday"
+      }
+    },
+    {
+      "type": "text",
+      "text": "You declined the transfer, so nothing moved. Checking is still forecast to fall to -$304.29 on Sun, Oct 18, ahead of your Mon, Oct 19 payday. The transfer I'd requested was $400.00 from Rainy Day Savings on Mon, Oct 12, which would have kept checking at $95.71 or more. I won't request it again unless you tell me to."
+    }
+  ],
+  "decisions": [
+    "declined"
+  ],
+  "usage": {
+    "input_tokens": 8,
+    "output_tokens": 666,
+    "cache_creation_tokens": 4513,
+    "cache_read_tokens": 18187
+  },
+  "cost_usd": 0.0284936,
+  "duration_ms": 7598,
+  "num_turns": 5,
+  "final_text": "You declined the transfer, so nothing moved. Checking is still forecast to fall to -$304.29 on Sun, Oct 18, ahead of your Mon, Oct 19 payday. The transfer I'd requested was $400.00 from Rainy Day Savings on Mon, Oct 12, which would have kept checking at $95.71 or more. I won't request it again unless you tell me to.",
+  "grounded": true
+}

@@ -1,0 +1,49 @@
+{
+  "key": "which subscription went up in price cancel it",
+  "prompt": "Which subscription went up in price? Cancel it.",
+  "variant": "approve",
+  "recorded_on": "2026-10-11",
+  "model": "claude-sonnet-5-5",
+  "init_tools": [
+    "mcp__money__cancel_subscription",
+    "mcp__money__forecast",
+    "mcp__money__get_accounts",
+    "mcp__money__list_recurring",
+    "mcp__money__move_money",
+    "mcp__money__search_transactions",
+    "mcp__money__simulate"
+  ],
+  "turns": [
+    {
+      "type": "tool_use",
+      "name": "mcp__money__list_recurring",
+      "input": {}
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__cancel_subscription",
+      "input": {
+        "series_id": "flickwave-video",
+        "reason": "Price increased from $11.99 to $15.49"
+      }
+    },
+    {
+      "type": "text",
+      "text": "Flickwave Video was the one that went up. It rose from $11.99 to $15.49, an increase of $3.50. I cancelled it, and the tool shows the series as cancelled. This is a prototype, so no merchant was contacted. Checking's forecast low is still $145.71 on Sun, Oct 18."
+    }
+  ],
+  "decisions": [
+    "approved"
+  ],
+  "usage": {
+    "input_tokens": 6,
+    "output_tokens": 238,
+    "cache_creation_tokens": 3270,
+    "cache_read_tokens": 10866
+  },
+  "cost_usd": 0.0179613,
+  "duration_ms": 4265,
+  "num_turns": 3,
+  "final_text": "Flickwave Video was the one that went up. It rose from $11.99 to $15.49, an increase of $3.50. I cancelled it, and the tool shows the series as cancelled. This is a prototype, so no merchant was contacted. Checking's forecast low is still $145.71 on Sun, Oct 18.",
+  "grounded": true
+}

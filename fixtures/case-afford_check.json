@@ -1,0 +1,46 @@
+{
+  "key": "case:afford_check",
+  "prompt": "Can I afford to spend $300 on a concert ticket tomorrow?",
+  "variant": "default",
+  "recorded_on": "2026-10-11",
+  "model": "claude-sonnet-5-5",
+  "init_tools": [
+    "mcp__money__cancel_subscription",
+    "mcp__money__forecast",
+    "mcp__money__get_accounts",
+    "mcp__money__list_recurring",
+    "mcp__money__move_money",
+    "mcp__money__search_transactions",
+    "mcp__money__simulate"
+  ],
+  "turns": [
+    {
+      "type": "tool_use",
+      "name": "mcp__money__get_accounts",
+      "input": {}
+    },
+    {
+      "type": "tool_use",
+      "name": "mcp__money__forecast",
+      "input": {
+        "days": 30
+      }
+    },
+    {
+      "type": "text",
+      "text": "Not comfortably, no. Even without the ticket, your checking is forecast to drop below its $50.00 floor on Thu, Oct 15 and hit a low of -$304.29 on Sun, Oct 18. That's because rent, power and insurance come out before your $2,650.00 paycheck lands on Mon, Oct 19. A $300.00 ticket tomorrow would make that dip deeper.\n\nYour Rainy Day Savings has $3,800.00 and could cover the gap. Do you want me to move money from savings to checking so the ticket and the bills all fit? I'd work out the amount with a simulation first."
+    }
+  ],
+  "decisions": [],
+  "usage": {
+    "input_tokens": 4,
+    "output_tokens": 513,
+    "cache_creation_tokens": 3575,
+    "cache_read_tokens": 5249
+  },
+  "cost_usd": 0.0206176,
+  "duration_ms": 6112,
+  "num_turns": 3,
+  "final_text": "Not comfortably, no. Even without the ticket, your checking is forecast to drop below its $50.00 floor on Thu, Oct 15 and hit a low of -$304.29 on Sun, Oct 18. That's because rent, power and insurance come out before your $2,650.00 paycheck lands on Mon, Oct 19. A $300.00 ticket tomorrow would make that dip deeper.\n\nYour Rainy Day Savings has $3,800.00 and could cover the gap. Do you want me to move money from savings to checking so the ticket and the bills all fit? I'd work out the amount with a simulation first.",
+  "grounded": true
+}
