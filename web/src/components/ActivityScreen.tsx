@@ -89,7 +89,7 @@ export function ActivityScreen({ txns, onAsk, busy }: { txns: Txn[]; onAsk: (q: 
             )}
             <button
               type="button"
-              data-testid="ask-about"
+              data-testid="txn-question"
               disabled={busy}
               onClick={() => {
                 const q = `What is the ${money(Math.abs(open.amount))} payment to ${open.merchant} about?`;
