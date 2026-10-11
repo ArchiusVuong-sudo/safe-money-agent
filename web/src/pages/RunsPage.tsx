@@ -47,7 +47,7 @@ export function RunsPage({ focusId }: { focusId: string | null }) {
   }, [selected]);
 
   return (
-    <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_520px] gap-5 px-6 py-5">
+    <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_460px] gap-5 px-6 py-5">
       <section className="flex min-h-0 flex-col rounded-2xl border border-slate-200 bg-white shadow-sm">
         <header className="flex items-center justify-between border-b border-slate-100 px-5 py-3">
           <div>
@@ -70,14 +70,13 @@ export function RunsPage({ focusId }: { focusId: string | null }) {
                 <tr>
                   <th className="px-4 py-2">Run</th>
                   <th className="px-2 py-2">Mode</th>
-                  <th className="px-2 py-2 text-right">Steps</th>
-                  <th className="px-2 py-2 text-right">Input</th>
+                                    <th className="px-2 py-2 text-right">Input</th>
                   <th className="px-2 py-2 text-right">Output</th>
                   <th className="px-2 py-2 text-right">Cache write</th>
                   <th className="px-2 py-2 text-right">Cache read</th>
                   <th className="px-2 py-2 text-right">Cost</th>
                   <th className="px-2 py-2 text-right">Time</th>
-                  <th className="px-4 py-2">Figures</th>
+                  <th className="px-3 py-2">Figures</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -105,18 +104,17 @@ export function RunsPage({ focusId }: { focusId: string | null }) {
                     <td className="px-2 py-2">
                       <Badge variant={r.provider === "live" ? "good" : "info"}>{r.provider}</Badge>
                     </td>
-                    <td className="px-2 py-2 text-right tabular-nums">{r.steps}</td>
-                    <td className="px-2 py-2 text-right tabular-nums">{num(r.input_tokens)}</td>
+                                        <td className="px-2 py-2 text-right tabular-nums">{num(r.input_tokens)}</td>
                     <td className="px-2 py-2 text-right tabular-nums">{num(r.output_tokens)}</td>
                     <td className="px-2 py-2 text-right tabular-nums">{num(r.cache_creation_tokens)}</td>
                     <td className="px-2 py-2 text-right tabular-nums">{num(r.cache_read_tokens)}</td>
                     <td className="whitespace-nowrap px-2 py-2 text-right tabular-nums">{r.cost_usd != null ? `$${r.cost_usd.toFixed(4)}` : "-"}</td>
                     <td className="whitespace-nowrap px-2 py-2 text-right tabular-nums">{ms(r.duration_ms)}</td>
-                    <td className="px-4 py-2">
+                    <td className="px-3 py-2">
                       {r.grounded === null ? (
                         <span className="text-slate-400">-</span>
                       ) : r.grounded ? (
-                        <Badge variant="good">grounded</Badge>
+                        <Badge variant="good">ok</Badge>
                       ) : (
                         <Badge variant="bad" title={r.ungrounded.join(", ")}>
                           {r.ungrounded.length} ungrounded

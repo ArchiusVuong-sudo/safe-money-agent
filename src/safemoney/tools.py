@@ -124,6 +124,7 @@ def _txn_row(entry: Entry, posting: Posting) -> dict[str, Any]:
     return {
         "id": entry.id,
         "date": entry.effective_on.isoformat(),
+        "day": day_label(entry.effective_on),
         "account": posting.account_id,
         "amount_usd": usd(posting.amount_cents),
         "category": entry.category,
@@ -173,6 +174,7 @@ async def list_recurring(ctx: ToolContext, args: dict[str, Any]) -> dict[str, An
                 "price_increase_usd": change,
                 "variable_amount": r.variable,
                 "next_date": r.next_date.isoformat(),
+                "next_day": day_label(r.next_date),
                 "status": r.status,
                 "untrusted": {"merchant": r.counterparty},
             }
@@ -372,7 +374,7 @@ TOOLS: tuple[ToolSpec, ...] = (
     ),
     ToolSpec(
         "move_money",
-        "Request a transfer between the user's own accounts (date in ISO format, today or up to 30 days ahead). The app checks the policy and asks the user to approve; it runs only after approval.",
+        "Request a transfer between the user's own accounts, by account id from get_accounts (date in ISO format, today or up to 30 days ahead). The app checks the policy and asks the user to approve; it runs only after approval.",
         TransferRequest,
         True,
         move_money,

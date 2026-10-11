@@ -15,6 +15,7 @@ export function ForecastChart({ days, floor, payday }: Props) {
   const maxY = Math.max(...days.map((d) => d.checking));
   const pad = (maxY - minY) * 0.12;
   const lowBound = minY < 0 ? minY - pad : 0;
+  const ticks = niceTicks(lowBound, maxY + pad);
   const negative = low !== null && low.checking < 0;
   const scheduled = days.filter((d) => d.events.some((e) => e.kind === "scheduled" && e.account === "chk"));
   // Gradients use the shape's own bounding box (data max to data min), so split at zero there.
@@ -55,7 +56,7 @@ export function ForecastChart({ days, floor, payday }: Props) {
             width={48}
             tick={{ fontSize: 10, fill: "#94a3b8" }}
             tickFormatter={(v: number) => compactMoney(v)}
-            tickCount={4}
+            ticks={ticks}
           />
           <Tooltip
             cursor={{ stroke: "#cbd5e1", strokeDasharray: "3 3" }}
@@ -120,4 +121,14 @@ export function ForecastChart({ days, floor, payday }: Props) {
       </ResponsiveContainer>
     </div>
   );
+}
+
+/** Round tick values (0 always included) inside [lo, hi]. */
+export function niceTicks(lo: number, hi: number): number[] {
+  const raw = (hi - lo) / 4;
+  const mag = 10 ** Math.floor(Math.log10(Math.max(raw, 1)));
+  const step = [1, 2, 2.5, 5, 10].map((m) => m * mag).find((s) => s >= raw) ?? 10 * mag;
+  const out: number[] = [];
+  for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) out.push(Math.round(v) || 0);
+  return out;
 }
