@@ -83,7 +83,7 @@ export function ForecastChart({ days, floor, payday }: Props) {
             y={floor}
             stroke="#f59e0b"
             strokeDasharray="4 3"
-            label={{ value: `Floor ${money(floor)}`, position: "insideTopRight", fontSize: 9, fill: "#b45309" }}
+            label={{ value: `Floor ${money(floor)}`, position: "insideBottomRight", offset: 4, fontSize: 9, fill: "#b45309" }}
           />
           {payday && (
             <ReferenceLine

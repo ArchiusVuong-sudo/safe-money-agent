@@ -69,19 +69,19 @@ export function HomeScreen({ home, onFix, busy }: { home: Home; onFix: () => voi
           <div className="text-[10.5px] text-slate-400">Forecast computed in code</div>
         </div>
         <ForecastChart days={home.forecast} floor={home.floors.chk ?? 50} payday={home.next_payday} />
-        <div className="mt-1 flex items-center gap-3 text-[10.5px] text-slate-500">
-          <span className="flex items-center gap-1">
-            <span className="size-2 rounded-full bg-rose-600" /> Low point
+        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[10.5px] text-slate-500" data-testid="chart-legend">
+          <span className="flex items-center gap-1 whitespace-nowrap">
+            <span className="size-2 shrink-0 rounded-full bg-rose-600" /> Low point
           </span>
-          <span className="flex items-center gap-1">
-            <span className="h-0 w-3 border-t border-dashed border-amber-500" /> $50 floor
+          <span className="flex items-center gap-1 whitespace-nowrap">
+            <span className="h-0 w-3 shrink-0 border-t border-dashed border-amber-500" /> {money(home.floors.chk ?? 50).replace(".00", "")} floor
           </span>
           {home.scheduled.length > 0 && (
-            <span className="flex items-center gap-1">
-              <span className="size-2 rounded-full bg-indigo-500" /> Scheduled
+            <span className="flex items-center gap-1 whitespace-nowrap">
+              <span className="size-2 shrink-0 rounded-full bg-indigo-500" /> Scheduled
             </span>
           )}
-          <span className="ml-auto">Avg spend {money(home.avg_daily_spend)}/day</span>
+          <span className="ml-auto whitespace-nowrap">Avg spend {money(home.avg_daily_spend)}/day</span>
         </div>
       </div>
 

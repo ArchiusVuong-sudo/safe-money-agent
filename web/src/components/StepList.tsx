@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { cn } from "../lib/cn";
-import { accountName, money, ms, num } from "../lib/format";
+import { accountName, dayLabel, money, ms, num } from "../lib/format";
 import type { PolicyCheck, Step } from "../lib/types";
 import { Badge } from "./ui/badge";
 
@@ -137,9 +137,9 @@ function Checks({ checks }: { checks: PolicyCheck[] }) {
 
 function argsLine(name: string, input: Record<string, any>): string {
   if (name === "move_money" || name === "simulate") {
-    return `${money(input.amount_usd)} ${accountName(input.from_account)} to ${accountName(input.to_account)} on ${input.date}`;
+    return `${money(input.amount_usd)} ${accountName(input.from_account)} to ${accountName(input.to_account)} on ${dayLabel(input.date)}`;
   }
-  if (name === "cancel_subscription") return `cancel ${input.series_id}`;
+  if (name === "cancel_subscription") return `cancel series ${input.series_id}`;
   return "";
 }
 
@@ -168,7 +168,7 @@ function resultSummary(name: string, out: Record<string, any>): ReactNode {
     case "move_money":
       return `${out.status} · entry #${out.entry_id}${out.already_posted ? " (already posted)" : ""}`;
     case "cancel_subscription":
-      return `${out.series_id} cancelled (simulated)`;
+      return `${out.untrusted?.merchant ?? out.series_id} cancelled (simulated)`;
     default:
       return "";
   }
@@ -211,7 +211,7 @@ function StepRow({ step }: { step: Step }) {
           </div>
           <div className="text-[11px] text-slate-400">
             {tools.length} tools, no built-in tools · read tools auto-allowed · write tools gated
-            {d.replay_of && ` · recorded ${d.replay_of}`}
+            {d.replay_of && ` · recorded ${dayLabel(d.replay_of)}`}
           </div>
         </Row>
       );
@@ -285,7 +285,7 @@ function StepRow({ step }: { step: Step }) {
             ))}
           </div>
           <div className="text-[11px] text-slate-400">
-            Two legs sum to zero · idempotency key <span className="font-mono text-slate-500">{d.idempotency_key}</span> · date {d.date}
+            Two legs sum to zero · idempotency key <span className="font-mono text-slate-500">{d.idempotency_key}</span> · date {dayLabel(d.date)}
           </div>
         </Row>
       );

@@ -39,6 +39,15 @@ export function shortDay(isoDate: string): string {
   return dt.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
+/** "2026-10-11" -> "Sun, Oct 11", the same label the server uses. Anything else is returned as is. */
+export function dayLabel(isoDate: string | null | undefined): string {
+  if (!isoDate) return "";
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(isoDate);
+  if (!m) return isoDate;
+  const dt = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  return `${dt.toLocaleDateString("en-US", { weekday: "short" })}, ${dt.toLocaleDateString("en-US", { month: "short" })} ${dt.getDate()}`;
+}
+
 export const ACCOUNT_NAMES: Record<string, string> = {
   chk: "Checking",
   sav: "Savings",

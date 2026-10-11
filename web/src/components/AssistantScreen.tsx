@@ -1,7 +1,7 @@
 import { ArrowUp, Info, ShieldAlert, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "../lib/cn";
-import { money } from "../lib/format";
+import { dayLabel, money } from "../lib/format";
 import type { Approval, ChatRun, Step } from "../lib/types";
 import { ApprovalCard } from "./ApprovalCard";
 
@@ -192,7 +192,7 @@ function RunBlock({
             <div key={s.seq} className="animate-fade-up flex gap-2 rounded-xl bg-amber-50 px-3 py-2 text-[11.5px] leading-snug text-amber-900" data-testid="policy-refusal">
               <ShieldAlert className="mt-px size-3.5 shrink-0 text-amber-600" />
               <span>
-                The policy refused {input?.amount_usd !== undefined ? `a ${money(input.amount_usd)} transfer on ${input.date}` : "a request"}
+                The policy refused {input?.amount_usd !== undefined ? `a ${money(input.amount_usd)} transfer on ${dayLabel(input.date)}` : "a request"}
                 {failed.length > 0 ? ` (${failed.map((c) => c.label.toLowerCase()).join(", ")} failed)` : ""}. You were not asked.
               </span>
             </div>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { accountName, compactMoney, money, ms, signedMoney } from "./format";
+import { accountName, compactMoney, dayLabel, money, ms, signedMoney } from "./format";
 
 describe("format", () => {
   it("formats dollars with cents", () => {
@@ -17,5 +17,11 @@ describe("format", () => {
     expect(ms(7634)).toBe("7.6 s");
     expect(accountName("sav")).toBe("Savings");
     expect(accountName("other")).toBe("other");
+  });
+  it("labels ISO dates like the server", () => {
+    expect(dayLabel("2026-10-11")).toBe("Sun, Oct 11");
+    expect(dayLabel("2026-10-23")).toBe("Fri, Oct 23");
+    expect(dayLabel("soon")).toBe("soon");
+    expect(dayLabel(undefined)).toBe("");
   });
 });
