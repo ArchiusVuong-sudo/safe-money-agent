@@ -8,6 +8,7 @@ from pydantic import ValidationError
 from safemoney import ledger, policy
 from safemoney.db import MoneyDB
 from safemoney.policy import CancelRequest, TransferRequest
+from safemoney.seed import series_key
 
 
 def tr(today: dt.date, amount: float, frm: str = "sav", to: str = "chk", days: int = 0) -> TransferRequest:
@@ -109,7 +110,11 @@ def test_args_hash_is_canonical(today: dt.date) -> None:
 
 @pytest.mark.parametrize(
     ("series", "fails"),
-    [("flickwave-video", []), ("maple-court-apartments", ["is_subscription"]), ("nope", ["series_exists", "is_subscription", "is_active"])],
+    [
+        (series_key("Flickwave Video"), []),
+        (series_key("Maple Court Apartments"), ["is_subscription"]),
+        ("nope", ["series_exists", "is_subscription", "is_active"]),
+    ],
 )
 def test_cancel_policy(money: MoneyDB, today: dt.date, series: str, fails: list[str]) -> None:
     with money.session() as s:
@@ -119,9 +124,9 @@ def test_cancel_policy(money: MoneyDB, today: dt.date, series: str, fails: list[
 
 def test_cancel_preview_and_already_cancelled(money: MoneyDB, today: dt.date) -> None:
     with money.session() as s:
-        r = policy.evaluate_cancel(s, today, CancelRequest(series_id="flickwave-video"))
+        r = policy.evaluate_cancel(s, today, CancelRequest(series_id=series_key("Flickwave Video")))
         assert r.preview["amount_usd"] == 15.49 and r.preview["previous_amount_usd"] == 11.99
         assert r.preview["saves_next_30_days_usd"] == 15.49
-        ledger.cancel_series(s, "flickwave-video", "a1")
-        again = policy.evaluate_cancel(s, today, CancelRequest(series_id="flickwave-video"))
+        ledger.cancel_series(s, series_key("Flickwave Video"), "a1")
+        again = policy.evaluate_cancel(s, today, CancelRequest(series_id=series_key("Flickwave Video")))
     assert [c.id for c in again.failed] == ["is_active"]

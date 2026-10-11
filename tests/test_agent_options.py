@@ -195,3 +195,19 @@ async def test_scripted_safe_call_waits_for_the_person(
     [answer] = cli.permission_answers
     assert answer["response"]["behavior"] == behavior
     assert gate.outcomes == [decision]
+
+
+def test_oauth_token_alone_falls_back_to_replay_and_says_why(monkeypatch: pytest.MonkeyPatch) -> None:
+    from dataclasses import replace
+
+    from safemoney import api
+    from safemoney.config import load_settings
+
+    monkeypatch.setenv("CLAUDE_CODE_OAUTH_TOKEN", "placeholder")
+    monkeypatch.setattr(api, "live_login_available", lambda: False)
+    settings = replace(load_settings(), force_replay=False)
+    provider, reason = api.pick_provider(settings, dt.date(2026, 10, 11))
+    assert provider.name == "replay"
+    assert "CLAUDE_CODE_OAUTH_TOKEN is not passed" in reason
+    monkeypatch.delenv("CLAUDE_CODE_OAUTH_TOKEN")
+    assert "OAUTH" not in api.pick_provider(settings, dt.date(2026, 10, 11))[1]

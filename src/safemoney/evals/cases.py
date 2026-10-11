@@ -19,10 +19,10 @@ from .. import forecast as fc
 from ..db import MoneyDB
 from ..ledger import agent_transfers, balance
 from ..models import SeriesStatus
-from ..seed import CHECKING, CONTACT, SAVINGS
+from ..seed import CHECKING, CONTACT, SAVINGS, series_key
 
 FIX_PROMPT = "Checking is forecast to drop below $0 before payday. Fix this."
-PRICE_RISE_SERIES = "flickwave-video"
+PRICE_RISE_SERIES = series_key("Flickwave Video")
 
 
 @dataclass

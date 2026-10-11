@@ -16,7 +16,7 @@
   "turns": [
     {
       "type": "text",
-      "text": "I need account IDs first."
+      "text": "I need account ids first."
     },
     {
       "type": "tool_use",
@@ -36,7 +36,7 @@
     },
     {
       "type": "text",
-      "text": "Retry on next payday with the same amount."
+      "text": "Retry once on next payday, Oct 19."
     },
     {
       "type": "tool_use",
@@ -46,12 +46,12 @@
         "to_account": "sav",
         "amount_usd": 1500,
         "date": "2026-10-19",
-        "memo": "Transfer to savings"
+        "memo": "Transfer to savings on payday"
       }
     },
     {
       "type": "text",
-      "text": "I couldn't move $1,500.00 today. Your checking would have dropped below its $50.00 floor by Sun, Oct 18, because of upcoming bills. I scheduled the same $1,500.00 from Everyday Checking to Rainy Day Savings for Mon, Oct 19, your next payday. Nothing has moved yet, and the app shows it as scheduled. The forecast still shows checking dipping to -$304.29 on Sun, Oct 18, before payday, so you may want to look at that."
+      "text": "I couldn't move the $1,500.00 today. Checking would have dropped below its $50.00 floor, and the policy refused it. I scheduled the same $1,500.00 for Mon, Oct 19 (payday) instead, and the app shows it as scheduled. Nothing has moved yet. Checking is still forecast to dip to -$304.29 on Sun, Oct 18, before payday and from your other bills, so you may want to look at that."
     }
   ],
   "decisions": [
@@ -60,13 +60,13 @@
   ],
   "usage": {
     "input_tokens": 8,
-    "output_tokens": 675,
-    "cache_creation_tokens": 1799,
-    "cache_read_tokens": 12189
+    "output_tokens": 579,
+    "cache_creation_tokens": 1545,
+    "cache_read_tokens": 12452
   },
-  "cost_usd": 0.0165274,
-  "duration_ms": 7287,
+  "cost_usd": 0.014603999999999999,
+  "duration_ms": 7326,
   "num_turns": 4,
-  "final_text": "I couldn't move $1,500.00 today. Your checking would have dropped below its $50.00 floor by Sun, Oct 18, because of upcoming bills. I scheduled the same $1,500.00 from Everyday Checking to Rainy Day Savings for Mon, Oct 19, your next payday. Nothing has moved yet, and the app shows it as scheduled. The forecast still shows checking dipping to -$304.29 on Sun, Oct 18, before payday, so you may want to look at that.",
+  "final_text": "I couldn't move the $1,500.00 today. Checking would have dropped below its $50.00 floor, and the policy refused it. I scheduled the same $1,500.00 for Mon, Oct 19 (payday) instead, and the app shows it as scheduled. Nothing has moved yet. Checking is still forecast to dip to -$304.29 on Sun, Oct 18, before payday and from your other bills, so you may want to look at that.",
   "grounded": true
 }

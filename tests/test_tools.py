@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import re
 import uuid
 
 import pytest
@@ -10,6 +11,7 @@ from safemoney import forecast as fc
 from safemoney import tools
 from safemoney.models import Approval, Entry, Posting
 from safemoney.policy import TransferRequest, args_hash
+from safemoney.seed import series_key
 from safemoney.tools import ToolContext, ToolError
 
 
@@ -67,7 +69,7 @@ async def test_search_filters_and_limits(ctx: ToolContext) -> None:
 
 async def test_list_recurring_reports_the_price_rise(ctx: ToolContext) -> None:
     out = await tools.list_recurring(ctx, {})
-    fw = next(x for x in out["series"] if x["id"] == "flickwave-video")
+    fw = next(x for x in out["series"] if x["id"] == series_key("Flickwave Video"))
     assert fw["price_changed"] and fw["previous_amount_usd"] == 11.99 and fw["last_amount_usd"] == 15.49
     assert fw["price_increase_usd"] == 3.5
     assert fw["untrusted"] == {"merchant": "Flickwave Video"}
@@ -79,6 +81,50 @@ async def test_forecast_payload(ctx: ToolContext) -> None:
     assert out["next_pay_usd"] == 2650.0
     assert len(out["daily"]) == 31 and out["daily_columns"] == ["date", "checking_usd", "savings_usd"]
     assert len((await tools.forecast(ctx, {"days": 7}))["daily"]) == 8
+
+
+def _plain_strings(value: object, under_untrusted: bool = False) -> list[str]:
+    """Every string in a tool result that is not inside an 'untrusted' field (keys included)."""
+    if isinstance(value, dict):
+        out: list[str] = []
+        for k, v in value.items():
+            out.append(str(k))
+            out += _plain_strings(v, under_untrusted or k == "untrusted")
+        return out
+    if isinstance(value, list):
+        return [s for v in value for s in _plain_strings(v, under_untrusted)]
+    return [value] if isinstance(value, str) and not under_untrusted else []
+
+
+async def test_feed_text_reaches_the_model_only_inside_untrusted(ctx: ToolContext, today: dt.date) -> None:
+    from safemoney.seed import INJECTED_MEMO, SERIES
+
+    feed = [s.counterparty for s in SERIES] + ["Green Basket Market", "Corner Bean Cafe", "City Transit", "Noodle Lane Kitchen"]
+    needles = [n.lower() for n in feed] + [re.sub(r"[^a-z0-9]+", "-", n.lower()) for n in feed]  # names and slugs
+    needles += ["ignore your previous rules", INJECTED_MEMO.lower()[:20]]
+    outputs = [
+        await tools.get_accounts(ctx, {}),
+        await tools.search_transactions(ctx, {"days": 90, "limit": 50}),
+        await tools.list_recurring(ctx, {}),
+        await tools.forecast(ctx, {"days": 30}),
+        await tools.simulate(ctx, fix_args(today)),
+    ]
+    for out in outputs:
+        plain = " ".join(_plain_strings(out)).lower()
+        leaked = sorted({n for n in needles if n in plain})
+        assert not leaked, leaked
+    events = outputs[3]["events"]
+    assert events and all(set(e) == {"date", "day", "account", "amount_usd", "type", "untrusted"} for e in events)
+    assert any(e["untrusted"] == {"merchant": "Maple Court Apartments"} for e in events)
+
+
+def test_series_ids_are_opaque() -> None:
+    from safemoney.seed import SERIES
+
+    ids = [series_key(s.counterparty) for s in SERIES]
+    assert len(set(ids)) == len(ids)
+    assert all(i.startswith("ser_") and len(i) == 12 and i[4:].isalnum() for i in ids)
+    assert series_key("Flickwave  video") == series_key("Flickwave Video")
 
 
 async def test_simulate_moves_nothing(ctx: ToolContext, today: dt.date) -> None:
@@ -152,12 +198,13 @@ async def test_policy_is_rechecked_at_execution(ctx: ToolContext, today: dt.date
 
 
 async def test_cancel_subscription_with_approval(ctx: ToolContext, today: dt.date) -> None:
-    args = {"series_id": "flickwave-video", "reason": "price went up"}
+    args = {"series_id": series_key("Flickwave Video"), "reason": "price went up"}
     with pytest.raises(ToolError):
         await tools.cancel_subscription(ctx, args)
     add_approval(ctx, "cancel_subscription", args)
     out = await tools.cancel_subscription(ctx, args)
     assert out["status"] == "cancelled" and out["simulated"] is True
+    assert out["untrusted"] == {"merchant": "Flickwave Video"} and "Flickwave" not in " ".join(_plain_strings(out))
     with ctx.money.session() as s:
         f = fc.build(s, today)
     assert not [e for d in f.days for e in d.events if e.label == "Flickwave Video"]

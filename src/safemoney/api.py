@@ -10,6 +10,7 @@ import asyncio
 import datetime as dt
 import json
 import logging
+import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from dataclasses import dataclass, field
@@ -73,7 +74,11 @@ def pick_provider(settings: Settings, today: dt.date) -> tuple[Provider, str]:
         return ReplayProvider(settings.fixtures_dir, today, settings.replay_delay_ms), "DEMO_REPLAY=1"
     if live_login_available():
         return LiveProvider(settings.agent_model, settings.max_turns), "Claude login found"
-    return ReplayProvider(settings.fixtures_dir, today, settings.replay_delay_ms), "no Claude login or API key found"
+    reason = "no Claude login or API key found"
+    if os.environ.get("CLAUDE_CODE_OAUTH_TOKEN"):
+        # Every CLAUDE_CODE_* variable is kept out of the agent's environment on purpose.
+        reason += " (CLAUDE_CODE_OAUTH_TOKEN is not passed to the agent; log in to Claude Code or set ANTHROPIC_API_KEY)"
+    return ReplayProvider(settings.fixtures_dir, today, settings.replay_delay_ms), reason
 
 
 def fresh_money(settings: Settings, today: dt.date) -> MoneyDB:

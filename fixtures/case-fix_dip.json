@@ -16,12 +16,12 @@
   "turns": [
     {
       "type": "tool_use",
-      "name": "mcp__money__forecast",
+      "name": "mcp__money__get_accounts",
       "input": {}
     },
     {
       "type": "tool_use",
-      "name": "mcp__money__get_accounts",
+      "name": "mcp__money__forecast",
       "input": {}
     },
     {
@@ -31,7 +31,7 @@
         "from_account": "sav",
         "to_account": "chk",
         "amount_usd": 400,
-        "date": "2026-10-13",
+        "date": "2026-10-11",
         "memo": "Cover checking until Oct 19 payday"
       }
     },
@@ -42,13 +42,13 @@
         "from_account": "sav",
         "to_account": "chk",
         "amount_usd": 400,
-        "date": "2026-10-13",
+        "date": "2026-10-11",
         "memo": "Cover checking until Oct 19 payday"
       }
     },
     {
       "type": "text",
-      "text": "I requested a $400.00 transfer from Rainy Day Savings to Everyday Checking for Tue, Oct 13, and it's now scheduled. The $400.00 comes after rent on Wed, Oct 14 and the other bills would have pushed checking down to -$304.29 on Sun, Oct 18. With the transfer, checking's lowest point is $95.71 on Sun, Oct 18, before payday on Mon, Oct 19. Savings stays above its $500.00 floor."
+      "text": "I moved $400.00 from Rainy Day Savings to Everyday Checking today, and the transfer posted. Checking now stays above its floor until payday on Mon, Oct 19. Its lowest point is $95.71 on Sun, Oct 18, where it had been heading to -$304.29. Savings is now $3,400.00, which is still well above its $500.00 floor."
     }
   ],
   "decisions": [
@@ -56,13 +56,13 @@
   ],
   "usage": {
     "input_tokens": 8,
-    "output_tokens": 701,
-    "cache_creation_tokens": 4659,
-    "cache_read_tokens": 18213
+    "output_tokens": 623,
+    "cache_creation_tokens": 4877,
+    "cache_read_tokens": 18686
   },
-  "cost_usd": 0.029432800000000002,
-  "duration_ms": 7865,
+  "cost_usd": 0.0296194,
+  "duration_ms": 7405,
   "num_turns": 5,
-  "final_text": "I requested a $400.00 transfer from Rainy Day Savings to Everyday Checking for Tue, Oct 13, and it's now scheduled. The $400.00 comes after rent on Wed, Oct 14 and the other bills would have pushed checking down to -$304.29 on Sun, Oct 18. With the transfer, checking's lowest point is $95.71 on Sun, Oct 18, before payday on Mon, Oct 19. Savings stays above its $500.00 floor.",
+  "final_text": "I moved $400.00 from Rainy Day Savings to Everyday Checking today, and the transfer posted. Checking now stays above its floor until payday on Mon, Oct 19. Its lowest point is $95.71 on Sun, Oct 18, where it had been heading to -$304.29. Savings is now $3,400.00, which is still well above its $500.00 floor.",
   "grounded": true
 }

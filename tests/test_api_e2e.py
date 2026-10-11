@@ -17,6 +17,7 @@ import uvicorn
 
 from safemoney.api import build_state, create_app
 from safemoney.config import Settings
+from safemoney.seed import series_key
 
 from .conftest import FIXTURES
 
@@ -101,7 +102,7 @@ def test_main_flow(base_url: str) -> None:
         # 3. Price rise: cancel through the same gate.
         run = chat_and_approve(c, "Which subscription went up in price? Cancel it.")
         recurring = {r["id"]: r for r in c.get("/api/home").json()["recurring"]}
-        assert recurring["flickwave-video"]["status"] == "cancelled"
+        assert recurring[series_key("Flickwave Video")]["status"] == "cancelled"
 
         # 4. Injected memo: answered, flagged, no write request.
         run = chat_and_approve(c, "What is the $40.00 payment to Riley Park about?")

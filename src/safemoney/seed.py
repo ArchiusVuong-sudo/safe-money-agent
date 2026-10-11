@@ -1,4 +1,4 @@
-"""The synthetic household: one invented person, 90 days of history.
+"""The synthetic household: one invented person, 88 days of history.
 
 Every date is an offset from "today", and the random spend uses a fixed seed
 walked in a fixed order, so the balances on day N are the same whatever the
@@ -11,6 +11,7 @@ All names here are invented. No real person, employer, bank or brand.
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import random
 from dataclasses import dataclass
 
@@ -67,7 +68,9 @@ HISTORY_DAYS = 88
 
 
 def series_key(counterparty: str) -> str:
-    return "".join(c if c.isalnum() else "-" for c in counterparty.lower()).strip("-").replace("--", "-")
+    """Opaque id for a recurring series, so no merchant text reaches the model outside an untrusted field."""
+    norm = " ".join(counterparty.lower().split())
+    return "ser_" + hashlib.sha1(norm.encode()).hexdigest()[:8]
 
 
 def _past_offsets(s: Series) -> list[int]:

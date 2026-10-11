@@ -8,6 +8,7 @@ from sqlalchemy import func, select
 from safemoney import ledger
 from safemoney.db import MoneyDB
 from safemoney.models import Entry, Posting, SeriesStatus
+from safemoney.seed import series_key
 
 
 def counts(money: MoneyDB) -> tuple[int, int]:
@@ -61,7 +62,7 @@ def test_bad_transfers_raise(money: MoneyDB, today: dt.date, frm: str, to: str, 
 
 def test_cancel_series_is_idempotent(money: MoneyDB) -> None:
     with money.session() as s:
-        assert ledger.cancel_series(s, "flickwave-video", "a1") is True
+        assert ledger.cancel_series(s, series_key("Flickwave Video"), "a1") is True
     with money.session() as s:
-        assert ledger.cancel_series(s, "flickwave-video", "a1") is False
+        assert ledger.cancel_series(s, series_key("Flickwave Video"), "a1") is False
         assert s.scalar(select(func.count()).select_from(SeriesStatus)) == 1

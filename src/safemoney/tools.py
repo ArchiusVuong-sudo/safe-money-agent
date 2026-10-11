@@ -200,6 +200,7 @@ def forecast_payload(f: fc.Forecast, days: int | None = None) -> dict[str, Any]:
         "next_payday": f.next_payday.isoformat() if f.next_payday else None,
         "next_payday_day": day_label(f.next_payday) if f.next_payday else None,
         "next_pay_usd": usd(f.next_pay_cents) if f.next_pay_cents else None,
+        "note": UNTRUSTED_NOTE,
         "low_points": lows,
         "daily": [[d.date.isoformat(), usd(d.balances[CHECKING]), usd(d.balances[SAVINGS])] for d in window],
         "daily_columns": ["date", "checking_usd", "savings_usd"],
@@ -209,8 +210,8 @@ def forecast_payload(f: fc.Forecast, days: int | None = None) -> dict[str, Any]:
                 "day": day_label(d.date),
                 "account": e.account,
                 "amount_usd": usd(e.amount_cents),
-                "label": e.label,
                 "type": e.kind,
+                "untrusted": {"merchant": e.label},
             }
             for d in window
             for e in d.events
@@ -301,13 +302,15 @@ def execute_cancel(s: Session, today: dt.date, approval: Approval) -> dict[str, 
         approval.used_at = utcnow()
     s.flush()
     after = fc.build(s, today)
+    series = next((x for x in after.series if x.id == req.series_id), None)
     return {
         "status": "cancelled",
         "series_id": req.series_id,
         "already_cancelled": not changed,
         "simulated": True,
-        "note": "Prototype: the series is marked cancelled and leaves the forecast; no merchant is contacted.",
+        "note": "Prototype: the series is marked cancelled and leaves the forecast; no merchant is contacted. " + UNTRUSTED_NOTE,
         "checking_low_after": _low_after(after),
+        "untrusted": {"merchant": series.counterparty if series else None},
     }
 
 
