@@ -74,10 +74,10 @@ class Gate:
             await self.recorder.step("permission", name, {"decision": "deny", "reason": "not one of the app's tools", "input": tool_input})
             return GateDecision(False, "unknown_tool", "This tool is not available.")
 
-        model = TransferRequest if name == "move_money" else CancelRequest
         started = time.perf_counter()
+        req: TransferRequest | CancelRequest
         try:
-            req = parse(model, tool_input)
+            req = parse(TransferRequest, tool_input) if name == "move_money" else parse(CancelRequest, tool_input)
         except ToolError as exc:
             await self.recorder.step("permission", name, {"decision": "deny", "reason": str(exc), "input": tool_input})
             return GateDecision(False, "invalid", str(exc))
@@ -120,7 +120,9 @@ class Gate:
             s.add(approval)
             s.flush()
             card = approval_dict(approval)
-        await self.recorder.step("permission", name, {"decision": "ask_user", "by": "policy", "input": args, "approval_id": approval_id, **verdict}, ms)
+        await self.recorder.step(
+            "permission", name, {"decision": "ask_user", "by": "policy", "input": args, "approval_id": approval_id, **verdict}, ms
+        )
         await self.recorder.emit({"type": "approval_request", "approval": card})
 
         waited = time.perf_counter()
@@ -137,7 +139,9 @@ class Gate:
         if answer == "approved":
             return GateDecision(True, "approved", updated_input=args)
         if answer == "declined":
-            return GateDecision(False, "declined", "The user declined this request. Nothing moved. Do not ask again in this turn; tell the user plainly.")
+            return GateDecision(
+                False, "declined", "The user declined this request. Nothing moved. Do not ask again in this turn; tell the user plainly."
+            )
         return GateDecision(False, "expired", "No answer from the user within 5 minutes, so the request lapsed. Nothing moved.")
 
 
@@ -187,6 +191,8 @@ class ToolHost:
                 )
                 await self.recorder.emit({"type": "money_changed"})
             elif name == "cancel_subscription":
-                await self.recorder.step("ledger_write", name, {k: payload[k] for k in ("series_id", "status", "already_cancelled", "simulated")})
+                await self.recorder.step(
+                    "ledger_write", name, {k: payload[k] for k in ("series_id", "status", "already_cancelled", "simulated")}
+                )
                 await self.recorder.emit({"type": "money_changed"})
         return payload, is_error

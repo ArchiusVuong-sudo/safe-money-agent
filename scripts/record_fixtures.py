@@ -82,12 +82,22 @@ async def record_chat(provider: LiveProvider, work: Path, out_dir: Path, today: 
         spec = RunSpec(message=message, history=list(history))
         run_id = create_run(traces, spec, provider)
         run = await execute_run(
-            run_id, spec, money=money, traces=traces, bus=None, provider=provider,
-            approver=AutoApprover(decision), today=today,  # type: ignore[arg-type]
+            run_id,
+            spec,
+            money=money,
+            traces=traces,
+            bus=None,
+            provider=provider,
+            approver=AutoApprover(decision),
+            today=today,  # type: ignore[arg-type]
         )
         if run.error:
             sys.exit(f"live run failed: {run.error}")
-        write(out_dir, f"chat-{slug(message)}-{'approve' if decision == 'approved' else 'decline'}", fixture(normalize(message), "approve", run))
+        write(
+            out_dir,
+            f"chat-{slug(message)}-{'approve' if decision == 'approved' else 'decline'}",
+            fixture(normalize(message), "approve", run),
+        )
         history.append((message, run.final_text))
 
     # The same first message, declined, on fresh data: replay follows this branch on Decline.
@@ -97,8 +107,14 @@ async def record_chat(provider: LiveProvider, work: Path, out_dir: Path, today: 
     spec = RunSpec(message=FIX_PROMPT, history=[])
     run_id = create_run(traces, spec, provider)
     run = await execute_run(
-        run_id, spec, money=money2, traces=traces, bus=None, provider=provider,
-        approver=AutoApprover("declined"), today=today,
+        run_id,
+        spec,
+        money=money2,
+        traces=traces,
+        bus=None,
+        provider=provider,
+        approver=AutoApprover("declined"),
+        today=today,
     )
     write(out_dir, f"chat-{slug(FIX_PROMPT)}-decline", fixture(normalize(FIX_PROMPT), "decline", run))
 

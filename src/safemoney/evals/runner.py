@@ -101,9 +101,7 @@ async def run_evals(
         template = MoneyDB(workdir / "template.db")
         seed_household(template, today)
         sem = asyncio.Semaphore(concurrency)
-        await asyncio.gather(
-            *(_run_case(eval_id, CASES_BY_ID[cid], template, workdir, traces, bus, provider, today, sem) for cid in ids)
-        )
+        await asyncio.gather(*(_run_case(eval_id, CASES_BY_ID[cid], template, workdir, traces, bus, provider, today, sem) for cid in ids))
         template.dispose()
     finally:
         with traces.session() as s:

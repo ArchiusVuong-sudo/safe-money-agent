@@ -157,14 +157,17 @@ def evaluate_transfer(s: Session, today: dt.date, req: TransferRequest, *, appro
     checks.append(Check("own_accounts", "Both accounts are yours", own, detail))
 
     in_range = MIN_TRANSFER_CENTS <= cents <= MAX_TRANSFER_CENTS
-    checks.append(
-        Check("amount_range", "Amount is $1 to $2,000", in_range, f"{fmt(cents)} requested")
-    )
+    checks.append(Check("amount_range", "Amount is $1 to $2,000", in_range, f"{fmt(cents)} requested"))
 
     last_day = today + dt.timedelta(days=WINDOW_DAYS)
     in_window = today <= req.date <= last_day
     checks.append(
-        Check("date_window", "Date is within 30 days", in_window, f"{req.date.isoformat()} (allowed {today.isoformat()} to {last_day.isoformat()})")
+        Check(
+            "date_window",
+            "Date is within 30 days",
+            in_window,
+            f"{req.date.isoformat()} (allowed {today.isoformat()} to {last_day.isoformat()})",
+        )
     )
 
     base = fc.build(s, today)
@@ -186,7 +189,9 @@ def evaluate_transfer(s: Session, today: dt.date, req: TransferRequest, *, appro
             if lp.cents < after.floors[acct]:
                 problems.append(f"{acct} falls to {fmt(lp.cents)} on {day_label(lp.date)}, under the {fmt(after.floors[acct])} floor")
         floors_ok = not problems
-        detail = "; ".join(problems) if problems else "checking stays at or above $50 and savings at or above $500 from the transfer date on"
+        detail = (
+            "; ".join(problems) if problems else "checking stays at or above $50 and savings at or above $500 from the transfer date on"
+        )
         # Low points from the transfer date on: that is the part a transfer can change.
         preview["low_points"] = {
             acct: {"before": _low(base, acct, req.date), "after": _low(after, acct, req.date)} for acct in sorted(base.floors)
@@ -200,8 +205,7 @@ def evaluate_transfer(s: Session, today: dt.date, req: TransferRequest, *, appro
     h = args_hash(req)
     dup_entry = any(
         e.effective_on == req.date
-        and sorted((p.account_id, p.amount_cents) for p in e.postings)
-        == sorted([(req.from_account, -cents), (req.to_account, cents)])
+        and sorted((p.account_id, p.amount_cents) for p in e.postings) == sorted([(req.from_account, -cents), (req.to_account, cents)])
         for e in agent_transfers(s)
     )
     dup_approval = s.scalar(
@@ -254,7 +258,9 @@ def evaluate_cancel(s: Session, today: dt.date, req: CancelRequest, *, approval_
             Approval.id != (approval_id or ""),
         )
     )
-    checks.append(Check("not_duplicate", "Not a duplicate", waiting is None, "no other request waiting" if waiting is None else "already waiting"))
+    checks.append(
+        Check("not_duplicate", "Not a duplicate", waiting is None, "no other request waiting" if waiting is None else "already waiting")
+    )
     allowed = all(c.passed for c in checks)
     preview: dict[str, Any] = {"kind": "cancel", "series_id": req.series_id, "reason": req.reason}
     if series is not None:

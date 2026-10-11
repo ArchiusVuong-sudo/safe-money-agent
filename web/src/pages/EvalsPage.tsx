@@ -98,11 +98,11 @@ export function EvalsPage({ info, onOpenRun }: { info: AppStateInfo | null; onOp
 
             <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
               <table className="w-full text-left text-[12.5px]" data-testid="eval-table">
-                <thead className="bg-slate-50 text-[11px] font-medium uppercase tracking-wide text-slate-500">
+                <thead className="whitespace-nowrap bg-slate-50 text-[11px] font-medium uppercase tracking-wide text-slate-500">
                   <tr>
                     <th className="w-[260px] px-4 py-2">Case</th>
                     <th className="px-2 py-2">Checks</th>
-                    <th className="px-2 py-2 text-right">Tokens in / out</th>
+                    <th className="px-2 py-2 text-right">In / out</th>
                     <th className="px-2 py-2 text-right">Cache read</th>
                     <th className="px-2 py-2 text-right">Time</th>
                     <th className="px-4 py-2" />
@@ -145,7 +145,7 @@ export function EvalsPage({ info, onOpenRun }: { info: AppStateInfo | null; onOp
                         {c.run?.input_tokens != null ? `${num(c.run.input_tokens)} / ${num(c.run.output_tokens)}` : "-"}
                       </td>
                       <td className="px-2 py-3 text-right tabular-nums text-slate-600">{num(c.run?.cache_read_tokens)}</td>
-                      <td className="px-2 py-3 text-right tabular-nums text-slate-600">{ms(c.run?.duration_ms)}</td>
+                      <td className="whitespace-nowrap px-2 py-3 text-right tabular-nums text-slate-600">{ms(c.run?.duration_ms)}</td>
                       <td className="px-4 py-3 text-right">
                         {c.run && (
                           <button type="button" onClick={() => onOpenRun(c.run!.id)} className="text-[12px] font-medium text-brand-700 hover:underline">

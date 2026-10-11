@@ -17,9 +17,7 @@ _MONTHS_SHORT = list(calendar.month_abbr)[1:]
 _MONTH_ALT = "|".join(_MONTHS_LONG + [m for m in _MONTHS_SHORT if m != "May"] + ["Sept"])
 _WEEKDAY_ALT = "Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thu|Fri|Sat|Sun"
 # "Friday, October 17", "Fri Oct 17", "Oct 17", "October 17th"
-_HUMAN = re.compile(
-    rf"\b(?:(?P<wd>{_WEEKDAY_ALT}),?\s+)?(?P<mon>{_MONTH_ALT})\.?\s+(?P<day>\d{{1,2}})(?P<suf>st|nd|rd|th)?\b"
-)
+_HUMAN = re.compile(rf"\b(?:(?P<wd>{_WEEKDAY_ALT}),?\s+)?(?P<mon>{_MONTH_ALT})\.?\s+(?P<day>\d{{1,2}})(?P<suf>st|nd|rd|th)?\b")
 _WEEKDAYS_LONG = list(calendar.day_name)
 _WEEKDAYS_SHORT = list(calendar.day_abbr)
 

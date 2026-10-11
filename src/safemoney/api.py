@@ -96,8 +96,8 @@ def build_state(settings: Settings | None = None, today: dt.date | None = None) 
             r.status, r.error = "error", "server restarted during the run"
         for e in s.scalars(select(EvalRun).where(EvalRun.status == "running")):
             e.status = "done"
-        for r in s.scalars(select(EvalResult).where(EvalResult.status.in_(["queued", "running"]))):
-            r.status, r.error = "error", "server restarted during the run"
+        for res in s.scalars(select(EvalResult).where(EvalResult.status.in_(["queued", "running"]))):
+            res.status, res.error = "error", "server restarted during the run"
     money = fresh_money(settings, today)
     expire_stale(money)
     provider, reason = pick_provider(settings, today)
@@ -242,7 +242,7 @@ def eval_payload(st: AppState, eval_id: str) -> dict[str, Any]:
             raise HTTPException(404, "no such eval run")
         results = {r.case_id: r for r in s.scalars(select(EvalResult).where(EvalResult.eval_run_id == eval_id))}
         runs = {r.id: r for r in s.scalars(select(Run).where(Run.eval_run_id == eval_id))}
-        cases = []
+        cases: list[dict[str, Any]] = []
         for c in CASES:
             r = results.get(c.id)
             if r is None:
@@ -310,7 +310,6 @@ def create_app(state: AppState | None = None) -> FastAPI:
     @app.get("/api/state")
     def get_state() -> dict[str, Any]:
         s = st()
-        replay = isinstance(s.provider, ReplayProvider)
         return {
             "mode": s.provider.name,
             "mode_reason": s.mode_reason,
@@ -318,7 +317,7 @@ def create_app(state: AppState | None = None) -> FastAPI:
             "today": s.today.isoformat(),
             "household": HOUSEHOLD_NAME,
             "synthetic": True,
-            "suggestions": [p for p in SUGGESTIONS if not replay or s.provider.has(normalize(p))],  # type: ignore[union-attr]
+            "suggestions": [p for p in SUGGESTIONS if not isinstance(s.provider, ReplayProvider) or s.provider.has(normalize(p))],
         }
 
     @app.get("/api/home")
@@ -341,9 +340,7 @@ def create_app(state: AppState | None = None) -> FastAPI:
         with s.traces.session() as db:
             prior = list(
                 db.scalars(
-                    select(Run)
-                    .where(Run.kind == "chat", Run.status == "done", Run.started_at >= s.chat_since)
-                    .order_by(Run.started_at)
+                    select(Run).where(Run.kind == "chat", Run.status == "done", Run.started_at >= s.chat_since).order_by(Run.started_at)
                 )
             )
         history = [(r.prompt, r.final_text) for r in prior][-3:]
@@ -369,9 +366,7 @@ def create_app(state: AppState | None = None) -> FastAPI:
     def get_chat() -> list[dict[str, Any]]:
         s = st()
         with s.traces.session() as db:
-            runs = list(
-                db.scalars(select(Run).where(Run.kind == "chat", Run.started_at >= s.chat_since).order_by(Run.started_at))
-            )
+            runs = list(db.scalars(select(Run).where(Run.kind == "chat", Run.started_at >= s.chat_since).order_by(Run.started_at)))
             out = []
             for r in runs:
                 cards = [
@@ -399,9 +394,7 @@ def create_app(state: AppState | None = None) -> FastAPI:
                 q = q.where(Run.kind == kind)
             runs = list(db.scalars(q))
             counts = dict(
-                db.execute(
-                    select(Step.run_id, func.count()).where(Step.run_id.in_([r.id for r in runs])).group_by(Step.run_id)
-                ).all()
+                db.execute(select(Step.run_id, func.count()).where(Step.run_id.in_([r.id for r in runs])).group_by(Step.run_id)).all()
             )
             return [run_summary(r, counts.get(r.id, 0)) for r in runs]
 
@@ -442,8 +435,10 @@ def create_app(state: AppState | None = None) -> FastAPI:
             rows = list(db.scalars(select(Approval).where(Approval.status == "pending").order_by(Approval.created_at)))
             return [{**approval_dict(a), "waiting": s.approver.is_waiting(a.id)} for a in rows]
 
+    # Endpoints that touch the event loop (futures, tasks) are async so they
+    # run on the loop thread, not in the threadpool.
     @app.post("/api/approvals/{approval_id}")
-    def decide(approval_id: str, body: DecisionIn) -> dict[str, Any]:
+    async def decide(approval_id: str, body: DecisionIn) -> dict[str, Any]:
         s = st()
         with s.money.session() as db:
             a = db.get(Approval, approval_id)
@@ -457,7 +452,7 @@ def create_app(state: AppState | None = None) -> FastAPI:
         return {"ok": True}
 
     @app.post("/api/reset")
-    def reset() -> dict[str, Any]:
+    async def reset() -> dict[str, Any]:
         s = st()
         if _chat_running(s):
             raise HTTPException(409, "Wait for the current answer before resetting.")
@@ -467,7 +462,7 @@ def create_app(state: AppState | None = None) -> FastAPI:
         return {"ok": True}
 
     @app.post("/api/evals/run")
-    def eval_start() -> dict[str, Any]:
+    async def eval_start() -> dict[str, Any]:
         s = st()
         if s.eval_task is not None and not s.eval_task.done():
             raise HTTPException(409, "An eval run is already going.")

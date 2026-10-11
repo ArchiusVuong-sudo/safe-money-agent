@@ -119,8 +119,15 @@ async def execute_run(
         run.grounded = check.grounded
         run.ungrounded = check.ungrounded
         run.error = error
-        run.script = {**result.script, "prompt": spec.message, "recorded_on": today.isoformat(), "usage": result.usage,
-                      "cost_usd": result.cost_usd, "duration_ms": result.duration_ms, "num_turns": result.num_turns}
+        run.script = {
+            **result.script,
+            "prompt": spec.message,
+            "recorded_on": today.isoformat(),
+            "usage": result.usage,
+            "cost_usd": result.cost_usd,
+            "duration_ms": result.duration_ms,
+            "num_turns": result.num_turns,
+        }
     await recorder.emit({"type": "run_finished", "run_id": run_id, "status": status, "final_text": result.final_text})
     if channel is not None:
         await channel.close()

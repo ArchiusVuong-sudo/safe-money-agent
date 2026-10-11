@@ -14,6 +14,8 @@ import datetime as dt
 import random
 from dataclasses import dataclass
 
+from sqlalchemy.orm import Session
+
 from .db import MoneyDB
 from .models import Account, Entry, Posting
 
@@ -100,7 +102,7 @@ def _discretionary(rng: random.Random) -> list[tuple[int, str, str, int]]:
 
 
 def _add(
-    session,  # type: ignore[no-untyped-def]
+    session: Session,
     key: str,
     day: dt.date,
     kind: str,

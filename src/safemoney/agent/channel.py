@@ -7,6 +7,7 @@ the start. Single process only: run uvicorn with one worker.
 from __future__ import annotations
 
 import asyncio
+import contextlib
 from collections.abc import AsyncIterator
 from typing import Any
 
@@ -33,10 +34,8 @@ class RunChannel:
         while True:
             async with self._cond:
                 if i >= len(self.events) and not self.closed:
-                    try:
+                    with contextlib.suppress(TimeoutError):
                         await asyncio.wait_for(self._cond.wait(), timeout=heartbeat_s)
-                    except TimeoutError:
-                        pass
                 batch = self.events[i:]
                 done = self.closed and i + len(batch) >= len(self.events)
             if not batch and not done:

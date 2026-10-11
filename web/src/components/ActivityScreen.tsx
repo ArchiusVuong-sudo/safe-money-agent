@@ -46,7 +46,7 @@ export function ActivityScreen({ txns, onAsk, busy }: { txns: Txn[]; onAsk: (q: 
                       <div className="flex items-center gap-1 truncate text-[11px] text-slate-400">
                         {t.status === "scheduled" && <span className="font-medium text-indigo-600">Scheduled · </span>}
                         {accountName(t.account)} · {t.category}
-                        {t.memo && <span className="rounded bg-amber-50 px-1 text-[10px] font-medium text-amber-700">memo</span>}
+                        {t.memo && t.source === "feed" && <span className="rounded bg-amber-50 px-1 text-[10px] font-medium text-amber-700">memo</span>}
                       </div>
                     </div>
                     <div className={cn("text-[12.5px] font-semibold tabular-nums", t.amount > 0 && "text-emerald-700")}>
@@ -77,7 +77,8 @@ export function ActivityScreen({ txns, onAsk, busy }: { txns: Txn[]; onAsk: (q: 
             <div className="mt-1 text-[12px] text-slate-500">
               {open.category} · {open.kind === "p2p" ? "person-to-person payment" : open.kind}
             </div>
-            {open.memo && (
+            {open.memo && open.source === "agent" && <div className="mt-2 text-[12px] text-slate-500">Note: {open.memo}</div>}
+            {open.memo && open.source === "feed" && (
               <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3">
                 <div className="mb-1 flex items-center gap-1 text-[10.5px] font-semibold uppercase tracking-wide text-amber-700">
                   <FileWarning className="size-3" /> Memo, raw text from the feed

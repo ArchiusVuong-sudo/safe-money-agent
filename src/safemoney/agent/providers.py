@@ -334,8 +334,7 @@ def load_fixtures(directory: Path) -> dict[str, list[Fixture]]:
 
 
 NO_RECORDING = (
-    "Replay mode has no recording for this message. Try one of the suggested prompts, "
-    "or run the app with a Claude login for live answers."
+    "Replay mode has no recording for this message. Try one of the suggested prompts, or run the app with a Claude login for live answers."
 )
 
 
@@ -391,9 +390,7 @@ class ReplayProvider:
                 continue
             decision = await gate.check(name, args)
             # Follow the recording whose decision at this point matches what really happened.
-            matching = [
-                f for f in candidates if gated_index < len(f.decisions) and f.decisions[gated_index] == decision.outcome
-            ]
+            matching = [f for f in candidates if gated_index < len(f.decisions) and f.decisions[gated_index] == decision.outcome]
             if current not in matching:
                 if not matching:
                     note = f"replay has no recording after a '{decision.outcome}' decision"

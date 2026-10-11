@@ -23,3 +23,4 @@ __pycache__/
 *.gif
 *.webm
 .DS_Store
+*.tsbuildinfo
